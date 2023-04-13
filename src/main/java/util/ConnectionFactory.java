@@ -23,7 +23,7 @@ public class ConnectionFactory {
 	
 		if (connection==null) {
 				
-			Properties properties = new Properties();
+			Properties properties = new Properties(); //ikashdoau
 			try(FileInputStream fis = new FileInputStream(RUTA_FICHERO_CONFIG)) {
 				
 				properties.load(fis);	
