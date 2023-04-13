@@ -13,15 +13,20 @@ import org.neodatis.odb.ODB;
 import org.neodatis.odb.ODBRuntimeException;
 import org.neodatis.odb.OID;
 import org.neodatis.odb.ObjectValues;
+import org.neodatis.odb.Objects;
 import org.neodatis.odb.Values;
 import org.neodatis.odb.core.oid.OIDFactory;
+import org.neodatis.odb.core.query.IQuery;
 import org.neodatis.odb.core.query.IValuesQuery;
+import org.neodatis.odb.core.query.criteria.Where;
+import org.neodatis.odb.impl.core.query.criteria.CriteriaQuery;
 import org.neodatis.odb.impl.core.query.values.ValuesCriteriaQuery;
 
 import modelo.Empleado;
 import modelo.dao.AbstractGenericDao;
 import modelo.exceptions.InstanceNotFoundException;
 import util.ConnectionFactory;
+import util.Utils;
 
 /**
  *
@@ -125,20 +130,34 @@ implements IEmpleadoDao {
 
 	@Override
 	public List<Empleado> findAll() {
-		// TODO Auto-generated method stub
-		return null;
+		
+		CriteriaQuery query = new CriteriaQuery(Empleado.class);
+		IQuery iquery = query.orderByAsc("empno");
+		
+		Objects<Empleado> empleados = this.dataSource.getObjects(iquery);
+		
+		return Utils.toList(empleados);
 	}
 
 	@Override
 	public List<Empleado> findByJob(String job) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		CriteriaQuery query = new CriteriaQuery(Empleado.class, Where.equal("job", job));
+		
+		Objects<Empleado> empleados = this.dataSource.getObjects(query);
+		
+		
+		return Utils.toList(empleados);
 	}
 
 	@Override
 	public boolean exists(Integer empno) {
-		// TODO Auto-generated method stub
-		return false;
+		
+		CriteriaQuery query = new CriteriaQuery(Empleado.class, Where.equal("empno", empno));
+		
+		Objects<Empleado> empleados = this.dataSource.getObjects(query);
+		
+		return (empleados.size()==1);
 	}
 
 	@Override
